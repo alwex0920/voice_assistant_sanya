@@ -62,11 +62,6 @@ def main():
             tts.va_speak("Для этого позовите своего друга")
             import drunkard
             drunkard.game.play_game()
-        elif "Запусти Minecraft" or "запусти Minecraft" in input_text:
-            nm = open("rg.json", "r+")
-            nam = json.load(nm)
-            name = nam['name']
-            os.startfile(f"C:\\Users\\{name}\\AppData\\Roaming\\.tlauncher\\legacy\\Minecraft\\TL.exe")
         elif "Скажи" or "скажи" in input_text:
             tts.va_speak(input_text)
         else:
