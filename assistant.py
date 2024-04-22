@@ -30,7 +30,7 @@ def main():
     while True:
         voice = recognize_speech()
         print(voice)
-        if "Саня" or "саня" in voice:
+        if "Саня" or "саня" or "Санёк" or "санёк" or "сане" or "Сане" or "Сандаль" or "сандаль" or "Александр" or "александр" in voice:
             tts.va_speak("Слушаю вас сэр")
             assistant()
         else:
