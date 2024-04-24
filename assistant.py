@@ -45,7 +45,6 @@ def assistant():
         tts.va_speak("Приятной игры сэр!")
     else:
         print(input_text)
-    exec(open("commands.txt", "r+").read())
     if input_text == "выключи компьютер":
         tts.va_speak("Выключение компьютера")
         os.system('shutdown /s /t 1')
@@ -72,6 +71,7 @@ def assistant():
         tts.va_speak("Слушаю вас сэр")
     else:
         print(input_text)
+        exec(open("commands.txt", "r+").read())
 
 def main():
     while True:
