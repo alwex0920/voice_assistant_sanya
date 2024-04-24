@@ -22,61 +22,63 @@ def recognize_speech():
             return "Не могу получить доступ к сервису распознавания речи"
 
 def assistant():
-    input_text = recognize_speech()
+    put_text = recognize_speech()
+    input_text = put_text.lower()
     print(input_text)
-    if input_text == "Найди" or "найди":
+    if input_text == "найди":
         import webbrowser
         webbrowser.open(f"https://yandex.ru/search/?text={input_text}&lr=63&clid=2271258&win=569")
     elif input_text == "Открой ютуб" or "открой ютуб":
         import webbrowser
         tts.va_speak("Приятного просмотра сэр!")
         webbrowser.open("https://youtube.com")
-    elif input_text == "Открой ВК" or "открой ВК":
+    elif input_text == "открой вк":
         import webbrowser
         webbrowser.open("https://vk.com")
-    elif input_text == "Открой Telegram" or "открой Telegram":
+    elif input_text == "открой telegram":
         import webbrowser
         webbrowser.open("https://web.telegram.org")
         tts.va_speak("Запрос выполнен сэр")
-    elif input_text == "Открой сервер" or "открой сервер":
+    elif input_text == "открой сервер":
         import webbrowser
         webbrowser.open("https://aternos.org")
         tts.va_speak("Приятной игры сэр!")
     else:
         print(input_text)
     exec(open("commands.txt", "r+").read())
-    if input_text == "Выключи компьютер" or "выключи компьютер":
+    if input_text == "выключи компьютер":
         tts.va_speak("Выключение компьютера")
         os.system('shutdown /s /t 1')
-    elif input_text == "Закрой окно" or "закрой окно":
+    elif input_text == "закрой окно":
         pyautogui.hotkey('alt', 'f4')
         tts.va_speak("Запрос выполнен сэр")
-    elif input_text == "Давай в крестики-нолики" or "давай в крестики-нолики":
+    elif input_text == "давай в крестики-нолики":
         tts.va_speak("Хорошо я буду беспощаден")
         import tictactoe
         tictactoe.tic()
-    elif input_text == "Поведай мудрость" or "поведай мудрость":
+    elif input_text == "поведай мудрость":
         citata = citata.citata_gen()
         tts.va_speak(citata)
-    elif input_text == "Что ты умеешь" or "что ты умеешь":
+    elif input_text == "что ты умеешь":
         text = "Я умею открывать ваши запросы командой 'найди, ваш запрос' также я умею открывать ютуб, выключать компьютер, открывать телеграм, открывать ссылки для скачивания, поиграть с вами в крестики-нолики, открыть гитхаб, дать рандомную цитату командой 'поведай мудрость' и всё"
         tts.va_speak(text)
-    elif input_text == "Давай в карты" or "давай в карты":
+    elif input_text == "давай в карты":
         tts.va_speak("Для этого позовите своего друга")
         import drunkard
         drunkard.game.play_game()
-    elif input_text == "Скажи" or "скажи":
+    elif input_text == "скажи":
         tts.va_speak(input_text)
-    elif input_text == "Саня" or "саня" or "Санёк" or "санёк" or "сане" or "Сане" or "Сандаль" or "сандаль" or "Александр" or "александр":
+    elif input_text == "саня" or "санёк" or "сане" or "сандаль" or "александр":
         tts.va_speak("Слушаю вас сэр")
     else:
         print(input_text)
 
 def main():
     while True:
-        voice = recognize_speech()
+        vo = recognize_speech()
+        voice = vo.lower()
         print(voice)
-        if input_text == "Саня" or "саня" or "Санёк" or "санёк" or "сане" or "Сане" or "Сандаль" or "сандаль" or "Александр" or "александр":
+        if voice == "саня" or "санёк" or "сане" or "сандаль" or "александр":
             tts.va_speak("Слушаю вас сэр")
             assistant()
         else:
@@ -86,7 +88,7 @@ def registr():
     with open("rg.json", "r+") as f:
         registr = json.load(f)
         print("Reading file...")
-        time.sleep(3)
+        time.sleep(2)
         if registr['reg'] == "yes":
             print("Success! Starting...")
             f.close()
