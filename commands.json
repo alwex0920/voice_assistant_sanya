@@ -1,0 +1,38 @@
+[
+    {
+        "keywords": ["вконтакте", "вк"],
+        "action": {
+            "type": "webbrowser",
+            "input": "https://vk.com"
+        }
+    },
+    {
+        "keywords": ["выключи компьютер", "выключи пк"],
+        "action": {
+            "type": "shell",
+            "input": "shutdown /s /t 1"
+        }
+    },
+    {
+      "keywords": ["время", "сколько времени", "какой час", "сколько время"],
+      "action":{
+        "type": "speak",
+        "input": "'Сейчас' + str(now.hour)  + ':' + str(now.minute)"
+      }
+    },
+    {
+      "keywords": ["открой", "запусти", "зайди", "зайди на"],
+      "action":{
+        "type": "browser",
+        "input": "text"
+      }
+    },
+    {
+      "keywords": ["узнай", "найди"],
+      "action":{
+        "type": "google",
+        "input": "text"
+      }
+    }
+
+]
