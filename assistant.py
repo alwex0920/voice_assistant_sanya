@@ -14,7 +14,6 @@ def registr():
         if registr['reg'] == "yes":
             print("Success! Starting...")
             f.close()
-            tts.va_speak("Чем могу помочь?")
             Helper().recognize()
         if registr['reg'] == "no" or "":
             print("Make sure that you have set the voice(Убедитесь что вы установили голос)")
@@ -31,9 +30,7 @@ def registr():
             freg.close()
             print("Starting...")
             tts.va_speak("Здраствуйте, я ваш голосовой помощник Саня.")
-            tts.va_speak("Чем могу помочь?")
             Helper().recognize()
-
 
 class Helper():
     def __init__(self):
@@ -44,19 +41,6 @@ class Helper():
         self.stream = p.open(format=pyaudio.paInt16, channels=1,
                         rate=16000, input=True, frames_per_buffer=8000)
         self.stream.start_stream()
-        self.cmds = {
-            ('время', 'сколько времени', 'какой час', 'сколько время') : self.get_time,
-            ('спасибо', 'от души', 'сенк') : self.thx,
-            ('прощай', 'пока', 'до свидания', 'гуд бай') : self.exit,
-            ('саня', 'сане', 'санёк', 'сандаль', 'александр') : self.hello,
-            ('выключи компьютер') : self.shutdown,
-        }
-    # Выход
-    def exit(self):
-        list_1 = ['Надеюсь мы скоро увидимся', 'Рада была помочь', 'Пока пока', 'Я отключаюсь']
-        tts.va_speak(random.choice(list_1))
-        os.system('cls')
-        raise SystemExit(0)
     # Поиск
     def google(self, text):
         url = f'https://www.google.com/search?q={" ".join(text)}'
@@ -90,16 +74,9 @@ class Helper():
                             tts.va_speak('Открываю ' + double_task[i])
                             j += 1
                             os.system('cls')
-                            print("Я вас слушаю...")
+                            tts.va_speak("Я вас слушаю...")
                             break
-    # Получить время
-    def get_time(self):
-        now = datetime.datetime.now()
-        tts.va_speak("Сейчас " + str(now.hour)  + ":" + str(now.minute))
-    # Спасибо
-    def thx(self):
-        thx_list = ['На здоровье', 'Обращайся', 'Не за что', 'Не стоит благодарности', 'Это моя работа', 'Обращайтесь еще', 'Рад был помочь']
-        tts.va_speak(random.choice(thx_list))
+
     # Слушание
     def listen(self):
         print("Я вас слушаю...")
@@ -112,15 +89,22 @@ class Helper():
     # Распознование речи
     def recognize(self):
         for text in self.listen():
-            if text.startswith(('открой', 'запусти', 'зайди', 'зайди на')):
-                self.open_browser(text)
-            elif text.startswith(('узнай', 'найди')):
-                self.google(text.split()[1:])
-            else:
-                for word in text.split():
-                    for keywords in self.cmds:
-                        if word in keywords:
-                            self.cmds[keywords]()
+            co = open("commands.json", "r")
+            com = co.read()
+            command = json.loads(com)
+            match command[1:][0]:
+                case "webbrowser":
+                    tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
+                    webbrowser.open(command[0][1])
+                case "shell":
+                    os.system(command[1][1])
+                case "speak":
+                    now = datetime.datetime.now()
+                    tts.va_speak(command[2][1])
+                case "browser":
+                    self.open_browser(command[3][1])
+                case "google":
+                    self.google(command[4][1].split()[1:])
 
 if __name__ == '__main__':
     registr()
