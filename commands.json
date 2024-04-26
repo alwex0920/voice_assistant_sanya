@@ -24,14 +24,14 @@
       "keywords": ["открой", "запусти", "зайди", "зайди на"],
       "action":{
         "type": "browser",
-        "input": "text"
+        "input": "input_text"
       }
     },
     {
       "keywords": ["узнай", "найди"],
       "action":{
         "type": "google",
-        "input": "text"
+        "input": "input_text"
       }
     }
 
