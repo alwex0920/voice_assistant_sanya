@@ -88,23 +88,27 @@ class Helper():
                     yield answer["text"]
     # Распознование речи
     def recognize(self):
-        for text in self.listen():
+        for input_text in self.listen():
             co = open("commands.json", "r")
             com = co.read()
             command = json.loads(com)
-            match command[1:][0]:
-                case "webbrowser":
-                    tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
-                    webbrowser.open(command[0][1])
-                case "shell":
-                    os.system(command[1][1])
-                case "speak":
-                    now = datetime.datetime.now()
-                    tts.va_speak(command[2][1])
-                case "browser":
-                    self.open_browser(command[3][1])
-                case "google":
-                    self.google(command[4][1].split()[1:])
-
+            for command in commands:
+               if any(kw in input_text.lower() for kw in command["keywords"]):
+                  ...
+                  continue # чтобы не продолжало итерироваться и взяло первую подходящую команду
+                  match command[1:][0]:
+                    case "webbrowser":
+                       tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
+                       webbrowser.open(command[0][1])
+                    case "shell":
+                       os.system(command[1][1])
+                    case "speak":
+                       now = datetime.datetime.now()
+                       tts.va_speak(command[2][1])
+                    case "browser":
+                       self.open_browser(command[3][1])
+                    case "google":
+                       self.google(command[4][1].split()[1:])
+                   
 if __name__ == '__main__':
     registr()
