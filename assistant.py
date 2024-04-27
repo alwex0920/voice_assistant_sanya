@@ -79,7 +79,7 @@ class Helper():
 
     # Слушание
     def listen(self):
-        print("Я вас слушаю...")
+        tts.va_speak("Я вас слушаю...")
         while True:
             data = self.stream.read(4000, exception_on_overflow=False)
             if self.rec.AcceptWaveform(data) and len(data) > 0:
@@ -92,23 +92,23 @@ class Helper():
             co = open("commands.json", "r")
             com = co.read()
             command = json.loads(com)
-            for command in commands:
-               if any(kw in input_text.lower() for kw in command["keywords"]):
-                  ...
-                  continue # чтобы не продолжало итерироваться и взяло первую подходящую команду
-                  match command[1:][0]:
+            input_text = input_text.lower()
+            if any(kw in input_text for kw in command[0:][0]):
+                match command['action']['type']:
                     case "webbrowser":
-                       tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
-                       webbrowser.open(command[0][1])
+                        tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
+                        webbrowser.open(command[0][1])
                     case "shell":
-                       os.system(command[1][1])
+                        os.system(command[1][1])
                     case "speak":
-                       now = datetime.datetime.now()
-                       tts.va_speak(command[2][1])
+                        now = datetime.datetime.now()
+                        tts.va_speak(command[2][1])
                     case "browser":
-                       self.open_browser(command[3][1])
+                        self.open_browser(command[3][1])
                     case "google":
-                       self.google(command[4][1].split()[1:])
-                   
+                        self.google(command[4][1].split()[1:])
+                    case _:
+                        print(input_text)
+
 if __name__ == '__main__':
     registr()
