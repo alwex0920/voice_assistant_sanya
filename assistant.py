@@ -93,7 +93,7 @@ class Helper():
             com = co.read()
             command = json.loads(com)
             input_text = input_text.lower()
-            if any(kw in input_text for kw in command[0:][0]):
+            if any(kw in input_text.split() for kw in command[0:][0]):
                 match command['action']['type']:
                     case "webbrowser":
                         tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
