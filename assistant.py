@@ -4,7 +4,7 @@ from vosk import Model, KaldiRecognizer, SetLogLevel
 from fuzzywuzzy import fuzz
 import time
 import platform
-import sys, webbrowser, colorama, datetime, tts, random, os
+import sys, webbrowser, colorama, datetime, tts, os
 
 def registr():
     with open("rg.json", "r+") as f:
@@ -46,37 +46,9 @@ class Helper():
         url = f'https://www.google.com/search?q={" ".join(text)}'
         tts.va_speak(f'Ищу в интернете: {" ".join(text)}')
         webbrowser.open(url)
-    # Приветствие
-    def hello(self):
-        hello_list = ['привет', 'ку', 'приветствую', 'хелоу', 'дарова', 'здорово']
-        tts.va_speak(random.choice(hello_list))
     def shutdown(self):
         tts.va_speak("Выключение компьютера")
         os.system('shutdown /s /t 1')
-    # Открытие браузера
-    def open_browser(self, task):
-        links = {
-            ('ютуб', 'ютюб'): 'https://youtube.com/',
-            ('вк', 'вконтакте', 'контакт'): 'https:vk.com/feed',
-            ('браузер', 'интернет', 'гугл'): 'https://google.com/',
-            ('телеграм', 'телега', 'телегу'): 'https://https://web.telegram.org/',
-        }
-        j = 0
-        if 'и' in task:
-            task = task.replace('и', '').replace('  ', ' ')
-        double_task = task.split()
-        if j != len(double_task):
-            for i in range(len(double_task)):
-                for vals in links:
-                    for word in vals:
-                        if fuzz.ratio(word, double_task[i]) > 75:
-                            webbrowser.open(links[vals])
-                            tts.va_speak('Открываю ' + double_task[i])
-                            j += 1
-                            os.system('cls')
-                            tts.va_speak("Я вас слушаю...")
-                            break
-
     # Слушание
     def listen(self):
         tts.va_speak("Я вас слушаю...")
@@ -93,22 +65,21 @@ class Helper():
             com = co.read()
             command = json.loads(com)
             input_text = input_text.lower()
-            if any(kw in input_text.split() for kw in command[0:][0]):
-                match command['action']['type']:
-                    case "webbrowser":
-                        tts.va_speak("Открываю")  # эти ответы тоже можно в джсонку засунуть
-                        webbrowser.open(command[0][1])
-                    case "shell":
-                        os.system(command[1][1])
-                    case "speak":
-                        now = datetime.datetime.now()
-                        tts.va_speak(command[2][1])
-                    case "browser":
-                        self.open_browser(command[3][1])
-                    case "google":
-                        self.google(command[4][1].split()[1:])
-                    case _:
-                        print(input_text)
+            print(input_text)
+            if any(i in command[0:][0] for i in input_text.split()):
+                if command['action']['type'] == 'speak':
+                    now = datetime.datetime.now()
+                    tts.va_speak(command['action']['input'])
+                elif command['action']['type'] == 'google':
+                    self.google(command['action']['input'].split()[1:])
+                elif command['action']['type'] == 'webbrowser':
+                    webbrowser.open(command['action']['input'])
+                elif command['action']['type'] == 'shell':
+                    os.system(command['action']['input'])
+                else:
+                    print(input_text)
+            else:
+                print(input_text)
 
 if __name__ == '__main__':
     registr()
