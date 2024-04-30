@@ -25,7 +25,7 @@
       "keywords": ["айзек", "isaac"],
       "action":{
         "type": "open_file",
-        "input": "C:\The Binding of Isaac - Repentance\isaac-ng.exe"
+        "input": "C:\\The Binding of Isaac - Repentance\\isaac-ng.exe"
       }
     }
   ]
