@@ -72,7 +72,7 @@ class Helper():
             elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'open_file':
                 os.startfile(command["commands"][0:]["action"]["input"])
             else:
-                print("Ваша команда не распознана")
+                print(f"Извините, ваша команда '{input_text}' не распознана, повторите попытку")
 
 if __name__ == '__main__':
     registr()
