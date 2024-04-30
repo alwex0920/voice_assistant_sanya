@@ -51,7 +51,7 @@ class Helper():
         os.system('shutdown /s /t 1')
     # Слушание
     def listen(self):
-        tts.va_speak("Я вас слушаю...")
+        print("Я вас слушаю...")
         while True:
             data = self.stream.read(4000, exception_on_overflow=False)
             if self.rec.AcceptWaveform(data) and len(data) > 0:
@@ -66,18 +66,15 @@ class Helper():
             command = json.loads(com)
             input_text = input_text.lower()
             print(input_text)
-            if any(i in command[0:][0] for i in input_text.split()):
-                if command['action']['type'] == 'speak':
-                    now = datetime.datetime.now()
-                    tts.va_speak(command['action']['input'])
-                elif command['action']['type'] == 'google':
-                    self.google(command['action']['input'].split()[1:])
-                elif command['action']['type'] == 'webbrowser':
-                    webbrowser.open(command['action']['input'])
-                elif command['action']['type'] == 'shell':
-                    os.system(command['action']['input'])
-                else:
-                    print(input_text)
+            if any(i in command[0:][0] for i in input_text.split()) and command['action']['type'] == 'speak':
+                now = datetime.datetime.now()
+                tts.va_speak(command['action']['input'])
+            elif any(i in command[0:][0] for i in input_text.split()) and command['action']['type'] == 'google':
+                self.google(command['action']['input'].split()[1:])
+            elif any(i in command[0:][0] for i in input_text.split()) and command['action']['type'] == 'webbrowser':
+                webbrowser.open(command['action']['input'])
+            elif any(i in command[0:][0] for i in input_text.split()) and command['action']['type'] == 'shell':
+                os.system(command['action']['input'])
             else:
                 print(input_text)
 
