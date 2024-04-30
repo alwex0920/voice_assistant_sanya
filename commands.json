@@ -1,11 +1,5 @@
-[
-   {
-        "keywords": ["вконтакте", "вк"],
-        "action": {
-            "type": "webbrowser",
-            "input": "https://vk.com"
-        }
-    },
+{
+  "commands":[
     {
         "keywords": ["выключи компьютер", "выключи пк"],
         "action": {
@@ -26,6 +20,13 @@
         "type": "google",
         "input": "input_text"
       }
+    },
+    {
+      "keywords": ["айзек", "isaac"],
+      "action":{
+        "type": "open_file",
+        "input": "C:\The Binding of Isaac - Repentance\isaac-ng.exe"
+      }
     }
-
-]
+  ]
+}
