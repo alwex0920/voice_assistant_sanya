@@ -58,18 +58,18 @@ class Helper():
     # Распознование речи
     def recognize(self):
         for input_text in self.listen():
-            co = open("commands.json", "r+")
-            com = co.read()
-            command = json.loads(com)
+            co = open("commands.json", "r")
+            comm = co.read()
+            command = json.loads(comm)
             input_text = input_text.lower()
-            if any(i in command["commands"][0:]["keywords"] for i in input_text.split()) and command['action']['type'] == 'shell':
+            if any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'shell':
                 os.system(command["commands"][0:]["action"]["input"])
-            elif any(i in command["commands"][0:]["keywords"] for i in input_text.split()) and command['action']['type'] == 'speak':
+            elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'speak':
                 now = datetime.datetime.now()
                 tts.va_speak(command["commands"][0:]["action"]["input"])
-            elif any(i in command["commands"][0:]["keywords"] for i in input_text.split()) and command['action']['type'] == 'google':
+            elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'google':
                 self.google(command["commands"][0:]["action"]["input"].split()[1:])
-            elif any(i in command["commands"][0:]["keywords"] for i in input_text.split()) and command['action']['type'] == 'open_file':
+            elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'open_file':
                 os.startfile(command["commands"][0:]["action"]["input"])
             else:
                 print("Ваша команда не распознана")
