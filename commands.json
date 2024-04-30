@@ -1,5 +1,5 @@
 [
-    {
+   {
         "keywords": ["вконтакте", "вк"],
         "action": {
             "type": "webbrowser",
@@ -18,13 +18,6 @@
       "action":{
         "type": "speak",
         "input": "'Сейчас' + str(now.hour)  + ':' + str(now.minute)"
-      }
-    },
-    {
-      "keywords": ["открой", "запусти", "зайди", "зайди на"],
-      "action":{
-        "type": "browser",
-        "input": "input_text"
       }
     },
     {
