@@ -48,7 +48,8 @@ class Helper():
         webbrowser.open(url)
     # Слушание
     def listen(self):
-        print("Я вас слушаю...")
+        os.system("cls")
+        print(".")
         while True:
             data = self.stream.read(4000, exception_on_overflow=False)
             if self.rec.AcceptWaveform(data) and len(data) > 0:
@@ -62,17 +63,23 @@ class Helper():
             comm = co.read()
             command = json.loads(comm)
             input_text = input_text.lower()
-            if any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'shell':
-                os.system(command["commands"][0:]["action"]["input"])
-            elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'speak':
-                now = datetime.datetime.now()
-                tts.va_speak(command["commands"][0:]["action"]["input"])
-            elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'google':
-                self.google(command["commands"][0:]["action"]["input"].split()[1:])
-            elif any(i in command["commands"][0:][0] for i in input_text.split()) and command['action']['type'] == 'open_file':
-                os.startfile(command["commands"][0:]["action"]["input"])
+            sanya = ["саня", "санёк", "сандаль", "александр"]
+            if any(i in sanya for i in input_text.split()):
+                tts.va_speak("Слушаю вас сэр")
+                for input_text in self.listen():
+                    if any(i in command["commands"][0]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'shell':
+                        os.system(command["commands"][0]["action"]["input"])
+                    elif any(i in command["commands"][1]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'speak':
+                        now = datetime.datetime.now()
+                        tts.va_speak(command["commands"][1]["action"]["input"])
+                    elif any(i in command["commands"][2]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'google':
+                        self.google(command["commands"][2]["action"]["input"].split()[1:])
+                    elif any(i in command["commands"][3]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'open_file':
+                        os.startfile(command["commands"][3]["action"]["input"])
+                    else:
+                        print(f"Извините, ваша команда '{input_text}' не распознана, повторите попытку")
             else:
-                print(f"Извините, ваша команда '{input_text}' не распознана, повторите попытку")
+                print(input_text)
 
 if __name__ == '__main__':
     registr()
