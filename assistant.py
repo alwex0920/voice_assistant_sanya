@@ -69,12 +69,12 @@ class Helper():
                 for input_text in self.listen():
                     if any(i in command["commands"][0]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'shell':
                         os.system(command["commands"][0]["action"]["input"])
-                    elif any(i in command["commands"][1]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'speak':
+                    elif any(i in command["commands"][1]["keywords"] for i in input_text.split()) and command['commands'][1]['action']['type'] == 'speak':
                         now = datetime.datetime.now()
                         tts.va_speak(command["commands"][1]["action"]["input"])
-                    elif any(i in command["commands"][2]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'google':
+                    elif any(i in command["commands"][2]["keywords"] for i in input_text.split()) and command['commands'][2]['action']['type'] == 'google':
                         self.google(command["commands"][2]["action"]["input"].split()[1:])
-                    elif any(i in command["commands"][3]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'open_file':
+                    elif any(i in command["commands"][3]["keywords"] for i in input_text.split()) and command['commands'][3]['action']['type'] == 'open_file':
                         os.startfile(command["commands"][3]["action"]["input"])
                     else:
                         print(f"Извините, ваша команда '{input_text}' не распознана, повторите попытку")
