@@ -45,11 +45,12 @@ class Helper():
     # Поиск
     def google(self, text):
         response = g4f.ChatCompletion.create(
-            model="g4f.models.gpt_4",
+            model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": text}],
+            stream=True
         )
-        print(response)
-        tts.va_speak(response)
+        for message in response:
+            print(message, flush=True, end='')
     # Слушание
     def listen(self):
         print(".")
