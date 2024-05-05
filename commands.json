@@ -1,31 +1,39 @@
 {
   "commands":[
     {
-        "keywords": ["выключи компьютер", "выключи пк"],
-        "action": {
-            "type": "shell",
-            "input": "shutdown /s /t 1"
+      "keywords": ["выключи компьютер", "выключи пк"],
+      "action": {
+        "input": "shutdown /s /t 1"
         }
     },
     {
       "keywords": ["время", "сколько времени", "какой час", "сколько время"],
       "action":{
-        "type": "speak",
-        "input": "'Сейчас' + str(now.hour)  + ':' + str(now.minute)"
+        "input": "Эта функция в разработке"
       }
     },
     {
-      "keywords": ["узнай", "найди"],
+      "keywords": ["узнай", "найди", "как ты думаешь", "почему"],
       "action":{
-        "type": "google",
         "input": "input_text"
       }
     },
     {
       "keywords": ["айзек", "isaac"],
       "action":{
-        "type": "open_file",
         "input": "C:\\The Binding of Isaac - Repentance\\isaac-ng.exe"
+      }
+    },
+    {
+      "keywords": ["включи радио", "вруби радио"],
+      "action":{
+        "input": "107.5"
+      }
+    },
+    {
+      "keywords": ["выключи радио", "выруби радио"],
+      "action":{
+        "input": "107.5"
       }
     }
   ]
