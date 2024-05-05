@@ -6,6 +6,7 @@ import time
 import platform
 import sys, webbrowser, colorama, datetime, tts, os
 from g4f.client import Client
+import radio
 
 def registr():
     with open("rg.json", "r+") as f:
@@ -42,7 +43,16 @@ class Helper():
         self.stream = p.open(format=pyaudio.paInt16, channels=1,
                         rate=16000, input=True, frames_per_buffer=8000)
         self.stream.start_stream()
-    # Поиск
+    # Слушание
+    def listen(self):
+        print(".")
+        while True:
+            data = self.stream.read(4000, exception_on_overflow=False)
+            if self.rec.AcceptWaveform(data) and len(data) > 0:
+                answer = json.loads(self.rec.Result())
+                if answer["text"]:
+                    yield answer["text"]
+
     def google(self, text):
         tts.va_speak("Подождите ваш запрос выполняется")
         txt = text
@@ -55,16 +65,14 @@ class Helper():
         tts.va_speak(response.choices[0].message.content)
         time.sleep(10)
         os.system("cls")
-        recognize()
-    # Слушание
-    def listen(self):
-        print(".")
-        while True:
-            data = self.stream.read(4000, exception_on_overflow=False)
-            if self.rec.AcceptWaveform(data) and len(data) > 0:
-                answer = json.loads(self.rec.Result())
-                if answer["text"]:
-                    yield answer["text"]
+        self.recognize()
+    def radiosan(self, check):
+        radio = radio.Radio()
+        radio.frequency = 107.5
+        if check == "on":
+            radio.play()
+        if check == "off":
+            radio.stop()
     # Распознование речи
     def recognize(self):
         for input_text in self.listen():
@@ -85,6 +93,10 @@ class Helper():
                         self.google(input_text)
                     elif any(i in command["commands"][3]["keywords"] for i in input_text.split()):
                         os.startfile(command["commands"][3]["action"]["input"])
+                    elif any(i in command["commands"][4]["keywords"] for i in input_text.split()):
+                        radiosan("on")
+                    elif any(i in command["commands"][5]["keywords"] for i in input_text.split()):
+                        radiosan("off")
                     else:
                         print(input_text)
             else:
