@@ -5,7 +5,7 @@ from fuzzywuzzy import fuzz
 import time
 import platform
 import sys, webbrowser, colorama, datetime, tts, os
-import g4f
+from g4f.client import Client
 
 def registr():
     with open("rg.json", "r+") as f:
@@ -44,13 +44,18 @@ class Helper():
         self.stream.start_stream()
     # Поиск
     def google(self, text):
-        response = g4f.ChatCompletion.create(
+        tts.va_speak("Подождите ваш запрос выполняется")
+        txt = text
+        client = Client()
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": text}],
-            stream=True
+            messages=[{"role": "user", "content": txt}]
         )
-        for message in response:
-            print(message, flush=True, end='')
+        print(response.choices[0].message.content)
+        tts.va_speak(response.choices[0].message.content)
+        time.sleep(10)
+        os.system("cls")
+        recognize()
     # Слушание
     def listen(self):
         print(".")
@@ -67,7 +72,7 @@ class Helper():
             comm = co.read()
             command = json.loads(comm)
             input_text = input_text.lower()
-            sanya = ["саня", "санёк", "сандаль", "александр"]
+            sanya = ["саня", "сане", "санёк", "сандаль", "александр"]
             if any(i in sanya for i in input_text.split()):
                 tts.va_speak("Слушаю вас сэр")
                 for input_text in self.listen():
@@ -75,9 +80,9 @@ class Helper():
                         os.system(command["commands"][0]["action"]["input"])
                     elif any(i in command["commands"][1]["keywords"] for i in input_text.split()):
                         now = datetime.datetime.now()
-                        tts.va_speak(command["commands"][1]["action"]["input"])
+                        tts.va_speak("Сейчас " + str(now.hour)  + ":" + str(now.minute))
                     elif any(i in command["commands"][2]["keywords"] for i in input_text.split()):
-                        self.google(command["commands"][2]["action"]["input"].split()[1:])
+                        self.google(input_text)
                     elif any(i in command["commands"][3]["keywords"] for i in input_text.split()):
                         os.startfile(command["commands"][3]["action"]["input"])
                     else:
