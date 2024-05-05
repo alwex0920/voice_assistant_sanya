@@ -5,6 +5,7 @@ from fuzzywuzzy import fuzz
 import time
 import platform
 import sys, webbrowser, colorama, datetime, tts, os
+import g4f
 
 def registr():
     with open("rg.json", "r+") as f:
@@ -43,12 +44,14 @@ class Helper():
         self.stream.start_stream()
     # Поиск
     def google(self, text):
-        url = f'https://www.google.com/search?q={" ".join(text)}'
-        tts.va_speak(f'Ищу в интернете: {" ".join(text)}')
-        webbrowser.open(url)
+        response = g4f.ChatCompletion.create(
+            model="g4f.models.gpt_4",
+            messages=[{"role": "user", "content": text}],
+        )
+        print(response)
+        tts.va_speak(response)
     # Слушание
     def listen(self):
-        os.system("cls")
         print(".")
         while True:
             data = self.stream.read(4000, exception_on_overflow=False)
@@ -59,7 +62,7 @@ class Helper():
     # Распознование речи
     def recognize(self):
         for input_text in self.listen():
-            co = open("commands.json", "r")
+            co = open("commands.json", "r", encoding="utf8")
             comm = co.read()
             command = json.loads(comm)
             input_text = input_text.lower()
@@ -67,17 +70,17 @@ class Helper():
             if any(i in sanya for i in input_text.split()):
                 tts.va_speak("Слушаю вас сэр")
                 for input_text in self.listen():
-                    if any(i in command["commands"][0]["keywords"] for i in input_text.split()) and command['commands'][0]['action']['type'] == 'shell':
+                    if any(i in command["commands"][0]["keywords"] for i in input_text.split()):
                         os.system(command["commands"][0]["action"]["input"])
-                    elif any(i in command["commands"][1]["keywords"] for i in input_text.split()) and command['commands'][1]['action']['type'] == 'speak':
+                    elif any(i in command["commands"][1]["keywords"] for i in input_text.split()):
                         now = datetime.datetime.now()
                         tts.va_speak(command["commands"][1]["action"]["input"])
-                    elif any(i in command["commands"][2]["keywords"] for i in input_text.split()) and command['commands'][2]['action']['type'] == 'google':
+                    elif any(i in command["commands"][2]["keywords"] for i in input_text.split()):
                         self.google(command["commands"][2]["action"]["input"].split()[1:])
-                    elif any(i in command["commands"][3]["keywords"] for i in input_text.split()) and command['commands'][3]['action']['type'] == 'open_file':
+                    elif any(i in command["commands"][3]["keywords"] for i in input_text.split()):
                         os.startfile(command["commands"][3]["action"]["input"])
                     else:
-                        print(f"Извините, ваша команда '{input_text}' не распознана, повторите попытку")
+                        print(input_text)
             else:
                 print(input_text)
 
