@@ -71,8 +71,10 @@ class Helper():
         radio.frequency = 107.5
         if check == "on":
             radio.play()
+            self.recognize()
         if check == "off":
             radio.stop()
+            self.recognize()
     # Распознование речи
     def recognize(self):
         for input_text in self.listen():
