@@ -6,7 +6,6 @@ import time
 import platform
 import sys, webbrowser, colorama, datetime, tts, os
 from g4f.client import Client
-import radio
 
 def registr():
     with open("rg.json", "r+") as f:
@@ -31,7 +30,7 @@ def registr():
             json.dump(data, freg)
             freg.close()
             print("Starting...")
-            tts.va_speak("Здраствуйте, я ваш голосовой помощник Саня.")
+            tts.va_speak("Здраствуйте, я ваш голосовой помощник Александр можно Саня.")
             Helper().recognize()
 
 class Helper():
@@ -59,22 +58,14 @@ class Helper():
         client = Client()
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": txt}]
+            messages=[{"role": "system", "content": ("Ты должен помогать пользователям и отвечать на все вопросы", "Твоё имя - Александр, ты искусственный интеллект от Alwex Developer", "Ты должен помогать пользователям")}, {"role": "user", "content": txt}]
         )
         print(response.choices[0].message.content)
         tts.va_speak(response.choices[0].message.content)
         time.sleep(10)
         os.system("cls")
         self.recognize()
-    def radiosan(self, check):
-        radio = radio.Radio()
-        radio.frequency = 107.5
-        if check == "on":
-            radio.play()
-            self.recognize()
-        if check == "off":
-            radio.stop()
-            self.recognize()
+
     # Распознование речи
     def recognize(self):
         for input_text in self.listen():
@@ -95,10 +86,6 @@ class Helper():
                         self.google(input_text)
                     elif any(i in command["commands"][3]["keywords"] for i in input_text.split()):
                         os.startfile(command["commands"][3]["action"]["input"])
-                    elif any(i in command["commands"][4]["keywords"] for i in input_text.split()):
-                        radiosan("on")
-                    elif any(i in command["commands"][5]["keywords"] for i in input_text.split()):
-                        radiosan("off")
                     else:
                         print(input_text)
             else:
