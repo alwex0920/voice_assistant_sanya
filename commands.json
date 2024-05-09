@@ -23,18 +23,6 @@
       "action":{
         "input": "C:\\The Binding of Isaac - Repentance\\isaac-ng.exe"
       }
-    },
-    {
-      "keywords": ["включи радио", "вруби радио"],
-      "action":{
-        "input": "107.5"
-      }
-    },
-    {
-      "keywords": ["выключи радио", "выруби радио"],
-      "action":{
-        "input": "107.5"
-      }
     }
   ]
 }
