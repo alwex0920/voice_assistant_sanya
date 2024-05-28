@@ -58,13 +58,27 @@ class Helper():
         client = Client()
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[{"role": "system", "content": ("Ты должен помогать пользователям и отвечать на все вопросы", "Твоё имя - Александр, ты искусственный интеллект от Alwex Developer", "Ты должен помогать пользователям")}, {"role": "user", "content": txt}]
+            messages=[{"role": "system", "content": "Твоё имя - Александр, ты искусственный интеллект от Alwex Developer"}, {"role": "user", "content": txt}]
         )
         print(response.choices[0].message.content)
         tts.va_speak(response.choices[0].message.content)
         time.sleep(10)
         os.system("cls")
         self.recognize()
+    def dialog(self):
+        for input_text in self.listen():
+            stop = ["стоп", "хватит", "достаточно", "довольно"]
+            if any(i in stop for i in input_text.lower()):
+                tts.va_speak("Рад был с вами поговорить!")
+                self.recognize()
+            else:
+                client = Client()
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[{"role": "system", "content": "Твоё имя - Александр, ты искусственный интеллект от Alwex Developer"}, {"role": "user", "content": input_text.lower()}]
+                )
+                print(response.choices[0].message.content)
+                tts.va_speak(response.choices[0].message.content)
 
     # Распознование речи
     def recognize(self):
@@ -81,15 +95,17 @@ class Helper():
                         os.system(command["commands"][0]["action"]["input"])
                     elif any(i in command["commands"][1]["keywords"] for i in input_text.split()):
                         now = datetime.datetime.now()
-                        tts.va_speak("Сейчас " + str(now.hour)  + ":" + str(now.minute))
+                        tts.va_speak("Сейчас " + str(now.hour)  + "часов" + str(now.minute) + "минут")
                     elif any(i in command["commands"][2]["keywords"] for i in input_text.split()):
                         self.google(input_text)
                     elif any(i in command["commands"][3]["keywords"] for i in input_text.split()):
-                        os.startfile(command["commands"][3]["action"]["input"])
+                        self.dialog()
+                    elif any(i in command["commands"][4]["keywords"] for i in input_text.split()):
+                        os.startfile(command["commands"][4]["action"]["input"])
                     else:
-                        print(input_text)
+                        self.google(input_text)
             else:
-                print(input_text)
+                print('')
 
 if __name__ == '__main__':
     registr()
